@@ -6,6 +6,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class LoginGoogle extends Driver {
     @FindBy(xpath="//input[@id='identifierId']")
     WebElement userName;
@@ -16,6 +22,9 @@ public class LoginGoogle extends Driver {
     String strConsoleURL="https://play.google.com/apps/publish";
     @FindBy(xpath="//button[contains(.,'Create application')]")
     WebElement createApplicationButton;
+
+    Properties pr=new Properties();
+    InputStream in;
 
 
 
@@ -28,16 +37,18 @@ public class LoginGoogle extends Driver {
 
 
     }
-    public AllApplication login() throws InterruptedException {
+    public AllApplication login() throws InterruptedException, IOException {
+        in=new FileInputStream("property.properties");
+        pr.load(in);
         wd.get("https://play.google.com/apps/publish");
         Thread.sleep(5);
 
-        userName.sendKeys("android@zaptechsolutions.com");
+        userName.sendKeys(pr.getProperty("android_user_name"));
         nextButton.click();
         Thread.sleep(5);
         WebDriverWait wait=new WebDriverWait(wd,10);
         WebElement we = wait.until(ExpectedConditions.elementToBeClickable(password));
-        we.sendKeys("FH36%$hs90");
+        we.sendKeys(pr.getProperty("android_password"));
         nextButton.click();
         Thread.sleep(20);
 
