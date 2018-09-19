@@ -3,6 +3,10 @@ package zapAndroid;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +20,13 @@ public class UploadToStoreController {
 
 
     @RequestMapping("/uploadToStore")
-    public UploadToStore uploadToStore(@RequestParam(value="name", defaultValue="Android_Build") String name) throws InterruptedException {
+    public UploadToStore uploadToStore(@RequestParam(value="name", defaultValue="Android_Build") String name) throws InterruptedException, IOException {
 
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\niprajapati\\Desktop\\Main Folder\\ws\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         LoginGoogle lg=new LoginGoogle(driver);
         allApplication=lg.login();
+
         allApplication.CreatingApplication();
         allApplication.uploadingAPK();
         return new UploadToStore(counter.incrementAndGet(),
