@@ -70,7 +70,5 @@ public class LoginGoogle extends Driver {
     	return false;
 
     }
-    public void tearDown(){
-        //wd.close();
-    }
+
 }
