@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import util.SampleTest;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class LoginGoogle extends Driver {
 
     Properties pr=new Properties();
     InputStream in;
-
+    SampleTest st;
 
 
 
@@ -34,15 +36,23 @@ public class LoginGoogle extends Driver {
     public LoginGoogle(WebDriver wd){
 
         super(wd);
-
+        st=new SampleTest();
+        st.jsonLogin();
 
     }
     public AllApplication login() throws InterruptedException, IOException {
         in=new FileInputStream("property.properties");
         pr.load(in);
+        System.out.println(st.v.getApplication_primary_language_1());
+        System.out.println(st.v.getApplication_name());
+        System.out.println(st.v.getApplication_phone());
+        System.out.println(st.v.getApplication_email_address());
+        System.out.println(st.v.getApplication_icon());
         wd.get("https://play.google.com/apps/publish");
         Thread.sleep(5);
 
+       
+        
         userName.sendKeys(pr.getProperty("android_user_name"));
         nextButton.click();
         Thread.sleep(5);
