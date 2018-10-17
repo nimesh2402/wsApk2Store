@@ -12,44 +12,45 @@ import com.jayway.restassured.response.Response;
 
 
 
-public class SampleTest{
+public class APILoginAndStore{
  public Variables v;
+ public boolean isAPICall; 
 
- public SampleTest() {
+ public APILoginAndStore() {
 	 v=new Variables();
  }
-	public void test1() {
-		System.out.println("I am in test1 test method and it will pass.");
-	}
 	
-	public void jsonLogin(){
+	public boolean jsonLogin(String strtEmailID, String strPassword,String strLoginURL,String strListURL){
 
-		String srtBaseURI="http://198.58.98.34:4350/api/user/login";
-		String strLoginBody="{\"email\":\"pradip@zaptechsolutions.com\",\"pass\": \"pradip123#\"}";
+		//String srtBaseURI="http://198.58.98.34:4350/api/user/login";
+		String srtBaseURI=strLoginURL;
+		//String strLoginBody="{\"email\":\"pradip@zaptechsolutions.com\",\"pass\": \"pradip123#\"}";
+		String strLoginBody="{\"email\":\""+strtEmailID+"\",\"pass\": \""+strPassword+"\"}";
 		Response res=postwithURL(srtBaseURI,strLoginBody);
+		int intStatusCode=res.getStatusCode();
+		if(intStatusCode!=200) {
+			isAPICall=false;
+			return isAPICall;
+		}
 		HashMap<?,?> apik=res.jsonPath().get("data");
 		String body = res.getBody().asString();
 		System.out.println(apik.containsKey("token"));
 		System.out.println(apik.get("token"));
 		System.out.println(body);
-		int intStatusCode=res.getStatusCode();
+		
 		String strContentType=res.getContentType();
-//		if(intStatusCode==200 &&strContentType.contains(""+MediaType.JSON_UTF_8)) {
-//			String strBaseURI4LiveApp="http://198.58.98.34:4350/api/publish/liveapp";
-//
-//			Response resLiveApp=postAuthenticaion(strBaseURI4LiveApp,apik.get("token").toString());
-//			System.out.println("Try"+resLiveApp.getBody().asString());
-//		}
+
 		
 		if(intStatusCode==200 &&strContentType.contains(""+MediaType.JSON_UTF_8)) {
-			String strBaseURI4LiveApp="http://198.58.98.34:4350/api/publish/list";
+			//String strBaseURI4LiveApp="http://198.58.98.34:4350/api/publish/list";
+
+			String strBaseURI4LiveApp=strListURL;
 
 			Response resLiveApp=postAuthenticaion(strBaseURI4LiveApp,apik.get("token").toString());
 			System.out.println("Try"+resLiveApp.getBody().asString());
 			 
 			
 			//  Base
-		
 			v.type=resLiveApp.jsonPath().get("data.type").toString().replace("[", "").replace("]", "");
 			v.setUser_id(resLiveApp.jsonPath().get("data.user_id").toString().replace("[", "").replace("]", ""));
 			v.setId(resLiveApp.jsonPath().get("data.id").toString().replace("[", "").replace("]", ""));
@@ -61,7 +62,6 @@ public class SampleTest{
 			
 			
 			// Step 1
-
 			v.setApplication_primary_language_1(resLiveApp.jsonPath().get("data.publish_data.step1.application_primary_language_1").toString().replace("[", "").replace("]", ""));
 			v.setApplication_name(resLiveApp.jsonPath().get("data.publish_data.step1.application_name").toString().replace("[", "").replace("]", ""));
 			
@@ -94,7 +94,8 @@ public class SampleTest{
 			System.out.println("application_icon: "+v.application_icon.replace("[", "").replace("]", ""));
 			
 			
-			
+			isAPICall=true;
+			return isAPICall;
 			//System.out.println("App Name: "+v.application_name.replace("[", "").replace("]", ""));
 			
 //			String[] arr=hashStep1.get(0).toString().split(",");
@@ -102,6 +103,9 @@ public class SampleTest{
 //				System.out.println("Step 1: "+arr[i]);
 //			}
 		}
+		else return isAPICall;
+	
+		
 
 	}
 

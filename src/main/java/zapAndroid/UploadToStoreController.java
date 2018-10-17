@@ -17,20 +17,27 @@ public class UploadToStoreController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
     AllApplication allApplication;
-
+    String strLoginURL="http://198.58.98.34:4350/api/user/login";
+    String strLoginUsername="pradip@zaptechsolutions.com";
+    String strLoginPassword="pradip123#";
+    String strListURL="http://198.58.98.34:4350/api/publish/list";
 
     @RequestMapping("/uploadToStore")
     public UploadToStore uploadToStore(@RequestParam(value="name", defaultValue="Android_Build") String name) throws InterruptedException, IOException {
 
         System.setProperty("webdriver.chrome.driver", "chromedriver");
         WebDriver driver = new ChromeDriver();
-        LoginGoogle lg=new LoginGoogle(driver);
-        allApplication=lg.login();
-
+        LoginGoogle lg=new LoginGoogle(driver,strLoginURL,strLoginUsername,strLoginPassword,strListURL);
+        boolean isLogin=lg.login();
+        if(isLogin) {
+        allApplication=new AllApplication(driver);
         allApplication.CreatingApplication();
         allApplication.uploadingAPK();
         return new UploadToStore(counter.incrementAndGet(),
-                String.format(template, name));
+                String.format(template, "Passed"));
+        }
+        return new UploadToStore(counter.incrementAndGet(),
+                String.format(template, "failed"));
     }
     @RequestMapping("/greetings")
     public UploadToStore greetings(@RequestParam(value="name", defaultValue="World") String name){

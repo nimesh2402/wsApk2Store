@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import util.SampleTest;
+import util.APILoginAndStore;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,21 +27,22 @@ public class LoginGoogle extends Driver {
 
     Properties pr=new Properties();
     InputStream in;
-    SampleTest st;
+    APILoginAndStore st;
+    public boolean isAPIResult=false;
 
-
-
-
-
-    public LoginGoogle(WebDriver wd){
+    public LoginGoogle(WebDriver wd,String strLoginURL,String strLoginUsername,String strLoginPassword,String strListURL){
 
         super(wd);
-        st=new SampleTest();
-        st.jsonLogin();
+        st=new APILoginAndStore();
+        isAPIResult=st.jsonLogin(strLoginUsername,strLoginPassword,strLoginURL,strListURL);
+        
 
     }
-    public AllApplication login() throws InterruptedException, IOException {
-        in=new FileInputStream("property.properties");
+    
+    public boolean login() throws InterruptedException, IOException {
+       
+    	if(isAPIResult) {
+    	in=new FileInputStream("property.properties");
         pr.load(in);
         System.out.println(st.v.getApplication_primary_language_1());
         System.out.println(st.v.getApplication_name());
@@ -64,7 +65,9 @@ public class LoginGoogle extends Driver {
 
         //wd.navigate().to(strConsoleURL);
         System.out.println("Out put");
-        return new AllApplication(wd);
+        return true;
+    	}
+    	return false;
 
     }
     public void tearDown(){
