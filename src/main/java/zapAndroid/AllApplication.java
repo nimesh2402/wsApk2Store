@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -160,7 +161,7 @@ public class AllApplication extends Driver {
         }
         if(jsExecution(lstbrowseFeatureGraphic1024,"document.getElementsByTagName('input')[12].style='display: table;height: 40px;position: absolute;'")){
             ac.moveToElement(browseFeatureGraphic1024).build().perform();
-            browseFeatureGraphic1024.sendKeys("C:\\Users\\niprajapati\\Desktop\\Main Folder\\ws\\Feature1024.png");
+            browseFeatureGraphic1024.sendKeys(System.getProperty("user.dir")+File.separator+"Feature1024.png");
         }
         Thread.sleep(200);
         String strDropDownTemp=strDropDown.replace("SELECT","Select an application type");

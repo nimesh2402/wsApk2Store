@@ -22,7 +22,7 @@ public class UploadToStoreController {
     @RequestMapping("/uploadToStore")
     public UploadToStore uploadToStore(@RequestParam(value="name", defaultValue="Android_Build") String name) throws InterruptedException, IOException {
 
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\niprajapati\\Desktop\\Main Folder\\ws\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "chromedriver");
         WebDriver driver = new ChromeDriver();
         LoginGoogle lg=new LoginGoogle(driver);
         allApplication=lg.login();
