@@ -9,6 +9,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import util.APILoginAndStore;
+import util.CommonUtils;
+import util.Variables;
+
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +64,6 @@ public class AllApplication extends Driver {
     @FindBy(xpath="//div[normalize-space(.)='Category']")
     WebElement strCategory;
 
-
     @FindBy(xpath="//div[normalize-space(.)='Privacy Policy']/following-sibling::div//input[@placeholder='http://...']")
     WebElement privacyPolicyTextBox;
 
@@ -95,14 +98,6 @@ public class AllApplication extends Driver {
     WebElement apkUpload;
 
 
-
-
-
-
-
-
-
-
     public void uploadingAPK(){
         AppReleaselink.click();
         WebDriverWait wait=new WebDriverWait(wd,30);
@@ -117,28 +112,26 @@ public class AllApplication extends Driver {
        if(jsExecution(lstbrowseMain,"document.getElementsByTagName('input')[10].style='display: table;height: 40px;position: absolute;visibility: visible;'")){
            apkUpload.sendKeys("C:\\Users\\niprajapati\\Desktop\\Main Folder\\ws\\app-release.apk");
         }
-
-
-
     }
 
-
-
+    CommonUtils commonUtil;
     public AllApplication(WebDriver wd){
 
         super(wd);
-
+        commonUtil=new CommonUtils(wd);
 
     }
-    public void CreatingApplication() throws InterruptedException {
+    public void CreatingApplication(Variables v) throws InterruptedException {
 
-        WebDriverWait wait=new WebDriverWait(wd,30);
+        v.getApplication_banner();
+        commonUtil.waitForElementToAppear(createApplicationButton);
+    	WebDriverWait wait=new WebDriverWait(wd,30);
         WebElement we = wait.until(ExpectedConditions.elementToBeClickable(createApplicationButton));
+        commonUtil.waitForElementToAppear(createApplicationButton);
         we.click();
         WebElement weTitleofTheApp=wait.until(ExpectedConditions.elementToBeClickable(titleofTheApp));
-        weTitleofTheApp.sendKeys("DemoApp");
+        weTitleofTheApp.sendKeys(v.getApplication_name());
         Thread.sleep(5);
-        System.out.println("Out put");
         finallyCreate.click();
 
 

@@ -28,14 +28,6 @@ public class Variables {
 		this.application_name = application_name;
 	}
 
-	public String getApplication_primary_language_2() {
-		return application_primary_language_2;
-	}
-
-	public void setApplication_primary_language_2(String application_primary_language_2) {
-		this.application_primary_language_2 = application_primary_language_2;
-	}
-
 	public String getApplication_website() {
 		return application_website;
 	}
@@ -124,13 +116,12 @@ public class Variables {
 		this.application_category_Step2 = application_category_Step2;
 	}
 
-	String user_id;
+	String user_id;	
 	String id;
 
 	// Step 1
-	String application_primary_language_1="";
+
 	String application_name="";
-	String  application_primary_language_2="";
 	String application_website="";
 	String[] application_phone_screens;
 	String application_phone;
@@ -139,6 +130,34 @@ public class Variables {
 	String application_short_description;
 	String application_full_description;
 	String application_icon;
+	public String getApplication_type() {
+		return application_type;
+	}
+
+	public void setApplication_type(String application_type) {
+		this.application_type = application_type;
+	}
+
+	public String getApplication_category() {
+		return application_category;
+	}
+
+	public void setApplication_category(String application_category) {
+		this.application_category = application_category;
+	}
+
+	public String getApplication_banner() {
+		return application_banner;
+	}
+
+	public void setApplication_banner(String application_banner) {
+		this.application_banner = application_banner;
+	}
+
+	String application_type;
+	String application_category;
+	String application_banner;
+	
 	
 	// Step 2
 	String application_email_address_Step2;
@@ -149,13 +168,9 @@ public Variables() {
 	
 }
 
-public String getApplication_primary_language_1() {
-	return application_primary_language_1;
-}
 
-public void setApplication_primary_language_1(String application_primary_language_1) {
-	this.application_primary_language_1 = application_primary_language_1;
-}
+
+
 
 public String getType() {
 	return type;
