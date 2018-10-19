@@ -1,12 +1,14 @@
 package zapAndroid;
 
+import org.apache.tomcat.util.descriptor.tld.TldRuleSet.Variable;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import util.SampleTest;
+import util.APILoginAndStore;
+import util.Variables;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,28 +29,27 @@ public class LoginGoogle extends Driver {
 
     Properties pr=new Properties();
     InputStream in;
-    SampleTest st;
 
+    public boolean isAPIResult=true;
+   String strLoginurl;
+   String strLoginUserName;
+   String strLoginpassword;
 
-
-
-
-    public LoginGoogle(WebDriver wd){
+    public LoginGoogle(WebDriver wd,String strLoginURL,String strLoginUsername,String strLoginPassword){
 
         super(wd);
-        st=new SampleTest();
-        st.jsonLogin();
-
+        strLoginurl=strLoginURL;
+        strLoginUserName	=strLoginUsername;
+        strLoginpassword=strLoginPassword;
     }
-    public AllApplication login() throws InterruptedException, IOException {
-        in=new FileInputStream("property.properties");
+    
+    public boolean login() throws InterruptedException, IOException {
+       
+    	if(isAPIResult) {
+    	in=new FileInputStream("property.properties");
         pr.load(in);
-        System.out.println(st.v.getApplication_primary_language_1());
-        System.out.println(st.v.getApplication_name());
-        System.out.println(st.v.getApplication_phone());
-        System.out.println(st.v.getApplication_email_address());
-        System.out.println(st.v.getApplication_icon());
-        wd.get("https://play.google.com/apps/publish");
+      
+        wd.get(strConsoleURL);
         Thread.sleep(5);
 
        
@@ -61,13 +62,10 @@ public class LoginGoogle extends Driver {
         we.sendKeys(pr.getProperty("android_password"));
         nextButton.click();
         Thread.sleep(20);
-
-        //wd.navigate().to(strConsoleURL);
-        System.out.println("Out put");
-        return new AllApplication(wd);
+        return true;
+    	}
+    	return false;
 
     }
-    public void tearDown(){
-        //wd.close();
-    }
+
 }
