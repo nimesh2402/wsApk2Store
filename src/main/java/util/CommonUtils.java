@@ -3,14 +3,17 @@ package util;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.validator.routines.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CommonUtils{
 	public WebDriver wd;
@@ -93,6 +96,22 @@ public class CommonUtils{
 		} catch (Exception e) {
 				}
 		return webElementPresence;
+	}
+	public  WebElement isElementAvailable(WebDriver driver) {
+        return new WebDriverWait(driver, 10)
+
+        .until(new ExpectedCondition<WebElement>() {
+
+              @Override
+
+              public WebElement apply(WebDriver d) {
+
+                     return d.findElement(By.id("fk-top-search-box"));
+
+              }
+
+        });
+		
 	}
 	
 

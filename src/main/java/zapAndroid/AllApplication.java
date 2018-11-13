@@ -1,5 +1,7 @@
 package zapAndroid;
 
+import org.apache.http.conn.ConnectionPoolTimeoutException;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -9,11 +11,15 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import okio.Timeout;
 import util.APILoginAndStore;
 import util.CommonUtils;
 import util.Variables;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +33,12 @@ public class AllApplication extends Driver {
 
     @FindBy(xpath="//h3//following-sibling::footer/button[contains(.,'Create')]")
     WebElement finallyCreate;
+
+    @FindBy(xpath="//p[contains(normalize-space(.),'Short description')]/../following-sibling::*//textarea")
+    WebElement weShortDescription;
+  
+    @FindBy(xpath="//p[contains(normalize-space(.),'Full description')]/../following-sibling::*//textarea")
+    WebElement weFullDescription;
 
     @FindBy(xpath="//div[contains(text(),'Add at least one phone screenshot here to help phone users see how your app will look on their device.')]/following-sibling::button")
     WebElement browse;
@@ -57,6 +69,7 @@ public class AllApplication extends Driver {
 
     @FindBy(xpath="//p[text()='Add feature graphic']")
     WebElement moveToElementbrowseFeatureGraphic1024;
+    
     String strDropDown="//div[starts-with(text(),'SELECT')]/..";
     String strDropDownValue="//div[contains(@role,'option')][contains(text(),'VALUE')]";
 
@@ -121,7 +134,7 @@ public class AllApplication extends Driver {
         commonUtil=new CommonUtils(wd);
 
     }
-    public void CreatingApplication(Variables v) throws InterruptedException {
+    public void CreatingApplication(Variables v) throws InterruptedException, MalformedURLException, IOException {
 
         v.getApplication_banner();
         commonUtil.waitForElementToAppear(createApplicationButton);
@@ -134,31 +147,47 @@ public class AllApplication extends Driver {
         Thread.sleep(5);
         finallyCreate.click();
 
-
+       
+        
         WebDriverWait ww= new WebDriverWait(wd,60);
         ww.until(ExpectedConditions.visibilityOf(addAtLeastOne));
+        weShortDescription.sendKeys(v.getApplication_short_description());
+        weFullDescription.sendKeys(v.getApplication_full_description());
         Actions ac=new Actions(wd);
         ac.moveToElement(addAtLeastOne).build().perform();
         Thread.sleep(5);
+        System.out.println("URL: "+v.getApplication_phone_screens()[0].toString());
+        
+        org.apache.commons.io.FileUtils.copyURLToFile(new URL(v.getApplication_phone_screens()[0].toString()),new File("C:\\Users\\incapsulate\\git\\wsApk2Store\\res\\main.jpeg"),10000,10000);
+        
         //js.executeAsyncScript("arguments[0].setAttribute('style', arguments[1]);", backGroundofBrowse, "opacity:1;");
         if(jsExecution(lstbrowseMain,"document.getElementsByTagName('input')[4].style='display: table;height: 40px;position: absolute;'")){
-            browseMain.sendKeys("C:\\Users\\niprajapati\\Desktop\\Main Folder\\ws\\12.jpg");
+            browseMain.sendKeys("C:\\Users\\incapsulate\\git\\wsApk2Store\\res\\main.jpeg");
         }
         Thread.sleep(5);
         //ac.moveToElement(moveToElementbrowseHiResolution512).build().perform();
 
+        org.apache.commons.io.FileUtils.copyURLToFile(new URL(v.getApplication_icon().toString()),new File("C:\\Users\\incapsulate\\git\\wsApk2Store\\res\\icon.jpeg"),10000,10000);
+        
+        // 512X512
         if(jsExecution(lstbrowseHiResolution512,"document.getElementsByTagName('input')[9].style='display: table;height: 40px;position: absolute;'")){
 
             ac.moveToElement(browseHiResolution512).build().perform();
-            browseHiResolution512.sendKeys("C:\\Users\\niprajapati\\Desktop\\Main Folder\\ws\\playstore-icon.png");
+            browseHiResolution512.sendKeys("C:\\Users\\incapsulate\\git\\wsApk2Store\\res\\icon.jpeg");
         }
+        
+        org.apache.commons.io.FileUtils.copyURLToFile(new URL(v.getApplication_banner().toString()),new File("C:\\Users\\incapsulate\\git\\wsApk2Store\\res\\screen.jpeg"),10000,10000);
+        
+        
         if(jsExecution(lstbrowseFeatureGraphic1024,"document.getElementsByTagName('input')[12].style='display: table;height: 40px;position: absolute;'")){
             ac.moveToElement(browseFeatureGraphic1024).build().perform();
-            browseFeatureGraphic1024.sendKeys(System.getProperty("user.dir")+File.separator+"Feature1024.png");
+            browseFeatureGraphic1024.sendKeys("C:\\Users\\incapsulate\\git\\wsApk2Store\\res\\screen.jpeg");
         }
         Thread.sleep(200);
+        v.getApplication_category();
+        v.getApplication_type();
         String strDropDownTemp=strDropDown.replace("SELECT","Select an application type");
-        String strDropDownValueTemp=strDropDownValue.replace("VALUE","Applications");
+        String strDropDownValueTemp=strDropDownValue.replace("VALUE",v.getApplication_type()+"s");
         if(wd.findElements(By.xpath(strDropDownTemp)).size()>0) {
             //ac.moveToElement(wd.findElement(By.xpath(strDropDownTemp))).build().perform();
             Thread.sleep(100);
@@ -175,7 +204,7 @@ public class AllApplication extends Driver {
         }
         Thread.sleep(50);
         String strDropDownTempCategory=strDropDownCategory.replace("SELECT","Select a category");
-        String strDropDownValueTempCategory=strDropDownValue.replace("VALUE","Business");
+        String strDropDownValueTempCategory=strDropDownValue.replace("VALUE",v.getApplication_category());
         if(wd.findElements(By.xpath(strDropDownTempCategory)).size()>0) {
             //ac.moveToElement(wd.findElement(By.xpath(strDropDownTempCategory))).build().perform();
             JavascriptExecutor js=(JavascriptExecutor)wd;

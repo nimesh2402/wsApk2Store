@@ -46,7 +46,7 @@ public class APILoginAndStore{
 
 			String strBaseURI4LiveApp=strListURL;
 
-			Response resLiveApp=postAuthenticaion(strBaseURI4LiveApp,apik.get("token").toString());
+			Response resLiveApp=postAuthenticaion(strBaseURI4LiveApp,"U2FsdGVkX19ByskKTFTkZ1GjXoD/iPRicicZ3f/GJrU=");//strBaseURI4LiveApp,apik.get("token").toString());
 			System.out.println("Try"+resLiveApp.getBody().asString());
 
 
@@ -76,7 +76,7 @@ public class APILoginAndStore{
 			v.setApplication_email_address(resLiveApp.jsonPath().get("data.publish_data.step1.application_email_address").toString().replace("[", "").replace("]", ""));
 
 			// App Phone screens
-			v.setApplication_phone_screens(resLiveApp.jsonPath().get("data.publish_data.step1.application_phone_screens").toString().split(","));
+			v.setApplication_phone_screens(resLiveApp.jsonPath().get("data.publish_data.step1.application_phone_screens").toString().replace("[", "").replace("]", "").split(","));
 
 			// App Privacy Policy
 			v.setApplication_privacy_policy(resLiveApp.jsonPath().get("data.publish_data.step1.application_privacy_policy").toString().replace("[", "").replace("]", ""));

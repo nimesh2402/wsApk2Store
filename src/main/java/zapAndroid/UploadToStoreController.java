@@ -34,7 +34,7 @@ public class UploadToStoreController {
     public UploadToStore uploadToStore(@RequestParam(value="username", defaultValue="Android_Build") String username,@RequestParam(value="password", defaultValue="Android_Build") String password) throws InterruptedException, IOException {
 
     	System.out.println(username+":"+password);
-       System.setProperty("webdriver.chrome.driver", "chromedriver");
+       System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
        
        // API call
        st=new APILoginAndStore();
